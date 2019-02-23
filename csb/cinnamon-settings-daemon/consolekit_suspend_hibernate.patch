@@ -1,0 +1,237 @@
+diff --git a/plugins/common/csd-power-helper.c b/plugins/common/csd-power-helper.c
+index 43776af..bbffa2a 100644
+--- a/plugins/common/csd-power-helper.c
++++ b/plugins/common/csd-power-helper.c
+@@ -18,6 +18,8 @@
+  *
+  */
+ 
++#include <gio/gio.h>
++
+ #include "config.h"
+ 
+ #include "csd-power-helper.h"
+@@ -185,10 +187,11 @@ consolekit_stop (void)
+                            consolekit_stop_cb, NULL);
+         g_object_unref (proxy);
+ }
++
+ static void
+-upower_sleep_cb (GObject *source_object,
+-                 GAsyncResult *res,
+-                 gpointer user_data)
++consolekit_sleep_cb (GObject *source_object,
++                     GAsyncResult *res,
++                     gpointer user_data) 
+ {
+         GVariant *result;
+         GError *error = NULL;
+@@ -197,7 +200,7 @@ upower_sleep_cb (GObject *source_object,
+                                            res,
+                                            &error);
+         if (result == NULL) {
+-                g_warning ("couldn't sleep using UPower: %s",
++                g_warning ("couldn't sleep using ConsoleKit: %s",
+                            error->message);
+                 g_error_free (error);
+         } else {
+@@ -206,30 +209,91 @@ upower_sleep_cb (GObject *source_object,
+ }
+ 
+ static void
+-upower_suspend (GDBusProxy *upower_proxy)
++consolekit_suspend (void)
+ {
+-        g_dbus_proxy_call (upower_proxy,
++        GError *error = NULL;
++        GDBusProxy *proxy;
++        
++        proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
++                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
++                                               NULL,
++                                               CONSOLEKIT_DBUS_NAME,
++                                               CONSOLEKIT_DBUS_PATH_MANAGER,
++                                               CONSOLEKIT_DBUS_INTERFACE_MANAGER,
++                                               NULL, &error);
++        if (proxy == NULL) {
++                g_warning ("cannot connect to ConsoleKit: %s",
++                           error->message);
++                g_error_free (error);
++                return;
++        }
++        g_dbus_proxy_call (proxy,
+                            "Suspend",
+-                           NULL,
++                           g_variant_new("(b)", TRUE),
+                            G_DBUS_CALL_FLAGS_NONE,
+                            -1, NULL,
+-                           upower_sleep_cb, NULL);
++                           consolekit_sleep_cb, NULL);
++        g_object_unref (proxy);
+ }
+ 
+ static void
+-upower_hibernate (GDBusProxy *upower_proxy)
++consolekit_hibernate (void)
+ {
+-        g_dbus_proxy_call (upower_proxy,
++        GError *error = NULL;
++        GDBusProxy *proxy;
++        
++        proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
++                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
++                                               NULL,
++                                               CONSOLEKIT_DBUS_NAME,
++                                               CONSOLEKIT_DBUS_PATH_MANAGER,
++                                               CONSOLEKIT_DBUS_INTERFACE_MANAGER,
++                                               NULL, &error);
++        if (proxy == NULL) {
++                g_warning ("cannot connect to ConsoleKit: %s",
++                           error->message);
++                g_error_free (error);
++                return;
++        }
++        g_dbus_proxy_call (proxy,
+                            "Hibernate",
+-                           NULL,
++                           g_variant_new("(b)", TRUE),
++                           G_DBUS_CALL_FLAGS_NONE,
++                           -1, NULL,
++                           consolekit_sleep_cb, NULL);
++        g_object_unref (proxy);
++}
++
++static void
++consolekit_hybrid_suspend (void)
++{
++        GError *error = NULL;
++        GDBusProxy *proxy;
++        
++        proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SYSTEM,
++                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
++                                               NULL,
++                                               CONSOLEKIT_DBUS_NAME,
++                                               CONSOLEKIT_DBUS_PATH_MANAGER,
++                                               CONSOLEKIT_DBUS_INTERFACE_MANAGER,
++                                               NULL, &error);
++        if (proxy == NULL) {
++                g_warning ("cannot connect to ConsoleKit: %s",
++                           error->message);
++                g_error_free (error);
++                return;
++        }
++        g_dbus_proxy_call (proxy,
++                           "HybridSleep",
++                           g_variant_new("(b)", TRUE),
+                            G_DBUS_CALL_FLAGS_NONE,
+                            -1, NULL,
+-                           upower_sleep_cb, NULL);
++                           consolekit_sleep_cb, NULL);
++        g_object_unref (proxy);
+ }
+ 
+ void
+ csd_power_suspend (gboolean    use_logind,
+-                   GDBusProxy *upower_proxy,
+                    gboolean    try_hybrid)
+ {
+   if (use_logind) {
+@@ -241,7 +305,12 @@ csd_power_suspend (gboolean    use_logind,
+     }
+   }
+   else {
+-    upower_suspend (upower_proxy);
++    if (try_hybrid && can_hybrid_sleep ()) {
++      consolekit_hybrid_suspend ();
++    }
++    else {
++      consolekit_suspend ();
++    }
+   }
+ }
+ 
+@@ -257,12 +326,12 @@ csd_power_poweroff (gboolean use_logind)
+ }
+ 
+ void
+-csd_power_hibernate (gboolean use_logind, GDBusProxy *upower_proxy)
++csd_power_hibernate (gboolean use_logind)
+ {
+   if (use_logind) {
+     logind_hibernate ();
+   }
+   else {
+-    upower_hibernate (upower_proxy);
++    consolekit_hibernate ();
+   }
+ }
+diff --git a/plugins/common/csd-power-helper.h b/plugins/common/csd-power-helper.h
+index eddf395..2cb2e59 100644
+--- a/plugins/common/csd-power-helper.h
++++ b/plugins/common/csd-power-helper.h
+@@ -24,10 +24,8 @@
+ 
+ G_BEGIN_DECLS
+ 
+-#include <gio/gio.h>
+-
+-void csd_power_suspend   (gboolean use_logind, GDBusProxy *upower_proxy, gboolean try_hybrid);
+-void csd_power_hibernate (gboolean use_logind, GDBusProxy *upower_proxy);
++void csd_power_suspend   (gboolean use_logind, gboolean try_hybrid);
++void csd_power_hibernate (gboolean use_logind);
+ void csd_power_poweroff  (gboolean use_logind);
+ 
+ G_END_DECLS
+diff --git a/plugins/media-keys/csd-media-keys-manager.c b/plugins/media-keys/csd-media-keys-manager.c
+index 0fbd632..b9ae54b 100644
+--- a/plugins/media-keys/csd-media-keys-manager.c
++++ b/plugins/media-keys/csd-media-keys-manager.c
+@@ -1470,7 +1470,6 @@ do_config_power_action (CsdMediaKeysManager *manager,
+                         const gchar *config_key)
+ {
+         CsdPowerActionType action_type;
+-
+         action_type = g_settings_get_enum (manager->priv->power_settings,
+                                            config_key);
+         switch (action_type) {
+@@ -1478,7 +1477,7 @@ do_config_power_action (CsdMediaKeysManager *manager,
+                 ;
+                 gboolean hybrid = g_settings_get_boolean (manager->priv->cinnamon_session_settings,
+                                                           "prefer-hybrid-sleep");
+-                csd_power_suspend (manager->priv->use_logind, manager->priv->upower_proxy, hybrid);
++                csd_power_suspend (manager->priv->use_logind, hybrid);
+                 break;
+         case CSD_POWER_ACTION_INTERACTIVE:
+                 cinnamon_session_shutdown (manager);
+@@ -1488,7 +1487,7 @@ do_config_power_action (CsdMediaKeysManager *manager,
+                 execute (manager, "dbus-send --dest=org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RequestShutdown", FALSE);
+                 break;
+         case CSD_POWER_ACTION_HIBERNATE:
+-                csd_power_hibernate (manager->priv->use_logind, manager->priv->upower_proxy);
++                csd_power_hibernate (manager->priv->use_logind);
+                 break;
+         case CSD_POWER_ACTION_BLANK:
+                 execute (manager, "cinnamon-screensaver-command --lock", FALSE);
+diff --git a/plugins/power/csd-power-manager.c b/plugins/power/csd-power-manager.c
+index d3d788a..3969bee 100644
+--- a/plugins/power/csd-power-manager.c
++++ b/plugins/power/csd-power-manager.c
+@@ -1939,7 +1939,7 @@ do_power_action_type (CsdPowerManager *manager,
+ 
+                 gboolean hybrid = g_settings_get_boolean (manager->priv->settings_cinnamon_session,
+                                                           "prefer-hybrid-sleep");
+-                csd_power_suspend (manager->priv->use_logind, manager->priv->upower_proxy, hybrid);
++                csd_power_suspend (manager->priv->use_logind, hybrid);
+                 break;
+         case CSD_POWER_ACTION_INTERACTIVE:
+                 cinnamon_session_shutdown ();
+@@ -1950,8 +1950,7 @@ do_power_action_type (CsdPowerManager *manager,
+                 }
+ 
+                 turn_monitors_off (manager);
+-
+-                csd_power_hibernate (manager->priv->use_logind, manager->priv->upower_proxy);
++                csd_power_hibernate (manager->priv->use_logind);
+                 break;
+         case CSD_POWER_ACTION_SHUTDOWN:
+                 /* this is only used on critically low battery where

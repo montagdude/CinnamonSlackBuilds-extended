@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Note that 64-bit or 32-bit shouldn't really matter here, as we are only
+# downloading source archives.
+MIRROR=http://slackware.osuosl.org/slackware64-current

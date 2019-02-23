@@ -1,0 +1,12 @@
+diff --git a/files/usr/share/cinnamon/cinnamon-settings/modules/cs_power.py b/files/usr/share/cinnamon/cinnamon-settings/modules/cs_power.py
+index 9f57238d..3c54893b 100755
+--- a/files/usr/share/cinnamon/cinnamon-settings/modules/cs_power.py
++++ b/files/usr/share/cinnamon/cinnamon-settings/modules/cs_power.py
+@@ -34,6 +34,7 @@ IDLE_DELAY_OPTIONS = [
+ ]
+ 
+ SLEEP_DELAY_OPTIONS = [
++    (180, _("3 minutes")),
+     (300, _("5 minutes")),
+     (600, _("10 minutes")),
+     (900, _("15 minutes")),
