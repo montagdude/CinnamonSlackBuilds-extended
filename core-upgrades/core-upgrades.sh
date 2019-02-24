@@ -42,6 +42,7 @@ python-pillow \
 Cython \
 libmbim \
 libqmi \
+ModemManager \
 "
 
 for package in $LIST; do
