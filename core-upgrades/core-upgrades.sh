@@ -40,6 +40,7 @@ pygobject3 \
 dbus-python \
 python-pillow \
 Cython \
+libmbim \
 "
 
 for package in $LIST; do
