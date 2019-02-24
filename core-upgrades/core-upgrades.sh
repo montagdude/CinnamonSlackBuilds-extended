@@ -41,6 +41,7 @@ dbus-python \
 python-pillow \
 Cython \
 libmbim \
+libqmi \
 "
 
 for package in $LIST; do
