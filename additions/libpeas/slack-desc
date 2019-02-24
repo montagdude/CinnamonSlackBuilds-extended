@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+libpeas: libpeas (GObject plugin system)
+libpeas:
+libpeas: libpeas is a gobject-based plugins engine, and is targetted at giving
+libpeas: every application the chance to assume its own extensibility. 
+libpeas:
+libpeas: Project URL: https://wiki.gnome.org/Projects/Libpeas
+libpeas:
+libpeas:
+libpeas:
+libpeas:
+libpeas:

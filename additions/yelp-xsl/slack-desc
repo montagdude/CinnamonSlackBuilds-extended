@@ -1,0 +1,12 @@
+        |-----handy-ruler------------------------------------------------------|
+yelp-xsl: yelp-xsl (document transformations from Yelp)
+yelp-xsl:
+yelp-xsl: yelp-xsl is a collection of programs and data files to help you
+yelp-xsl: build, maintain, and distribute documentation. It provides XSLT
+yelp-xsl: stylesheets that can be built upon for help viewers and publishing
+yelp-xsl: systems. These stylesheets output JavaScript and CSS content, and
+yelp-xsl: reference images provided by yelp-xsl. This package also redistributes
+yelp-xsl: copies of the jQuery and jQuery.Syntax JavaScript libraries.
+yelp-xsl:
+yelp-xsl: Project URL: https://github.com/GNOME/yelp-xsl
+yelp-xsl:

@@ -1,0 +1,12 @@
+       |-----handy-ruler------------------------------------------------------|
+libwebp: libwebp (library to encode and decode WebP format)
+libwebp:
+libwebp: libwebp is a library to encode and decode images in WebP format. This
+libwebp: package contains the library that can be used in other programs to add
+libwebp: WebP support, as well as the command line tools 'cwebp' and 'dwebp'.
+libwebp:
+libwebp: Project URL: https://developers.google.com/speed/webp/
+libwebp:
+libwebp:
+libwebp:
+libwebp:

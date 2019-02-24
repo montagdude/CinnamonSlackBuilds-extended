@@ -1,0 +1,11 @@
+Before running this script you must have a lightdm user and group:
+> groupadd -g 800 lightdm
+> useradd -d /var/lib/lightdm -s /bin/false -u 800 -g 800 lightdm
+
+To enable lightdm at login, switch to runlevel 4 and add this to
+/etc/rc.d/rc.4 (above block for gdm):
+
+# Try to use lightdm
+if [ -x /usr/bin/lightdm ]; then
+  exec /usr/bin/lightdm
+fi

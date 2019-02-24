@@ -1,0 +1,158 @@
+#!/bin/sh
+
+# SlackBuild script for lightdm
+
+# Copyright 2016,2017 Philip van der Hoeven, Almere, The Netherlands
+# Modified 2018 by Skaendo <cinslack@tutanota.com> for the CinSlack Project
+# Modified 2019 by Daniel Prosser, Lexington Park, MD
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED
+#  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO
+#  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+#  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+#  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+#  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+#  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+#  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+PRGNAM=lightdm
+VERSION=${VERSION:-1.28.0}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_csbe}
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i586 ;;
+    arm*) ARCH=arm ;;
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp/csbe/additions}
+
+bailout() {
+  echo "  You must have lightdm user and group:"
+  echo "    # groupadd -g 800 lightdm"
+  echo "    # useradd -d /var/lib/lightdm -s /bin/false -u 800 -g 800 lightdm"
+  exit 1
+}
+
+# Bail if user isn't valid on your system
+if ! getent group lightdm 1>/dev/null 2>/dev/null ; then
+  bailout
+elif ! getent passwd lightdm 1>/dev/null 2>/dev/null ; then
+  bailout
+fi
+
+# Download source
+wget -c https://github.com/CanonicalLtd/$PRGNAM/releases/download/$VERSION/$PRGNAM-$VERSION.tar.xz
+
+if [ "$ARCH" = "i586" ]; then
+  SLKCFLAGS="-O2 -march=i586 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+else
+  SLKCFLAGS="-O2"
+  LIBDIRSUFFIX=""
+fi
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.xz
+cd $PRGNAM-$VERSION
+chown -R root:root .
+find -L . \
+ \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
+  -o -perm 511 \) -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
+  -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
+
+# Note: explicitly disable qt5 because it fails to build without std=c++11 flag
+# when Qt5 is present. With newer compilers this may not be the case. Anyway, we
+# don't need Qt5 support.
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --libexecdir=/usr/lib${LIBDIRSUFFIX}/lightdm \
+  --localstatedir=/var \
+  --sbindir=/usr/bin \
+  --sysconfdir=/etc \
+  --mandir=/usr/man \
+  --disable-static \
+  --enable-introspection \
+  --enable-vala \
+  --disable-tests \
+  --disable-liblightdm-qt5 \
+  --with-greeter-session=slick-greeter \
+  --with-greeter-user=lightdm \
+  --build=$ARCH-slackware-linux
+
+make
+make install DESTDIR=$PKG
+
+cat $CWD/Xsession > $PKG/etc/lightdm/Xsession
+chmod 755 $PKG/etc/lightdm/Xsession
+
+rm -rf $PKG/etc/apparmor.d
+rm -rf $PKG/etc/init
+
+mv $PKG/etc/lightdm/lightdm.conf $PKG/etc/lightdm/lightdm.conf.new
+mv $PKG/etc/lightdm/users.conf $PKG/etc/lightdm/users.conf.new
+mv $PKG/etc/lightdm/keys.conf $PKG/etc/lightdm/keys.conf.new
+
+mv $PKG/etc/pam.d/lightdm $PKG/etc/pam.d/lightdm.new
+mv $PKG/etc/pam.d/lightdm-autologin $PKG/etc/pam.d/lightdm-autologin.new
+mv $PKG/etc/pam.d/lightdm-greeter $PKG/etc/pam.d/lightdm-greeter.new
+
+# Remove systemd entries from pam files
+sed -i 's@^.*pam_systemd.so.*$@@' $PKG/etc/pam.d/lightdm.new
+sed -i 's@^.*pam_systemd.so.*$@@' $PKG/etc/pam.d/lightdm-autologin.new
+sed -i 's@^.*pam_systemd.so.*$@@' $PKG/etc/pam.d/lightdm-greeter.new
+
+# Fix session-wrapper in config
+sed -i 's@^.*session-wrapper.*$@session-wrapper=/etc/lightdm/Xsession@' $PKG/etc/lightdm/lightdm.conf.new
+
+mkdir -p $PKG/var/lib/lightdm
+chown lightdm:lightdm $PKG/var/lib/lightdm
+mkdir -p $PKG/var/lib/lightdm-data
+chown lightdm:lightdm $PKG/var/lib/lightdm-data
+
+find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
+  | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
+
+find $PKG/usr/man -type f -exec gzip -9 {} \;
+for i in $( find $PKG/usr/man -type l ) ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a COPYING* NEWS \
+  $PKG/usr/doc/$PRGNAM-$VERSION
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}

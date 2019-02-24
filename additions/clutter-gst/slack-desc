@@ -1,0 +1,12 @@
+           |-----handy-ruler------------------------------------------------------|
+clutter-gst: clutter-gst (GStreamer integration library for Clutter)
+clutter-gst:
+clutter-gst: clutter-gst is an integration library for using GStreamer with
+clutter-gst: Clutter. It provides a GStreamer sink to upload frames to GL and an
+clutter-gst: actor that implements the ClutterGstPlayer interface using playbin.
+clutter-gst:
+clutter-gst: Project URL: https://github.com/GNOME/clutter-gst
+clutter-gst:
+clutter-gst:
+clutter-gst:
+clutter-gst:
