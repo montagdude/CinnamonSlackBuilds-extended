@@ -1,0 +1,12 @@
+1. All SlackBuilds in core-additions were adapted from the Slackware64-current
+   source tree. Credit for these goes to Patrick Volkerding and the rest of
+   the Slackware development team.
+2. All SlackBuilds in csb were adapted from the CinnamonSlackBuilds project.
+   Credit for these goes to Willy Sudiarto Raharjo and other contributors.
+3. SlackBuilds in the additions directory were generally created from scratch,
+   but in some cases portions of them were adapted from elsewhere (e.g.,
+   SlackBuilds.org). Credit for these is given in the SlackBuild scripts
+   themselves.
+
+All SlackBuild scripts adapted from others retain their original copyright
+notices and license.
