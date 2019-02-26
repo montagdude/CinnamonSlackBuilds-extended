@@ -1,3 +1,0 @@
-libpeas
-yelp-tools (build yelp itself from SBo if you want help menu to be available at
-            runtime. It has too many dependencies to be worth putting here)
