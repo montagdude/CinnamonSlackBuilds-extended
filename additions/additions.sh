@@ -5,24 +5,35 @@
 LIST=" \
 gnome-common \
 mate-common \
-lightdm \
-slick-greeter \
-lightdm-settings \
 glade \
 gtksourceview3 \
 enchant2 \
 gspell \
 libpeas \
-xed \
+clutter-gst \
+libwebp \
+geoclue2 \
+hyphen \
+brotli \
+woff2 \
+webkit2gtk \
+appstream-glib \
 yelp-xsl \
 yelp-tools \
-xviewer \
-pix \
-clutter-gst \
+yelp \
+file-roller \
+libcryptui \
+lightdm \
+slick-greeter \
+lightdm-settings \
+xed \
 xplayer-plparser \
 xplayer \
-libwebp
-geoclue2
+xreader \
+xviewer \
+pix \
+nemo-fileroller \
+nemo-seahorse \
 "
 
 for package in $LIST; do

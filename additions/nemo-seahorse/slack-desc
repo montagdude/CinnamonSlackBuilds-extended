@@ -1,0 +1,12 @@
+             |-----handy-ruler------------------------------------------------------|
+nemo-seahorse: nemo-seahorse (GnuPG encryption extension for Nemo)
+nemo-seahorse:
+nemo-seahorse: nemo-seahorse is an extension for Nemo which allows encryption and
+nemo-seahorse: decryption of OpenPGP files using GnuPG. It is a fork of
+nemo-seahorse: seahorse-nautilus-3.3.1.
+nemo-seahorse:
+nemo-seahorse: Project URL: https://github.com/linuxmint/nemo-extensions
+nemo-seahorse:
+nemo-seahorse:
+nemo-seahorse:
+nemo-seahorse:

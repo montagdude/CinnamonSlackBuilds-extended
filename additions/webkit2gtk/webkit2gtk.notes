@@ -1,0 +1,3 @@
+I tried a newer version (2.22.6), but it requires a later version of gstreamer.
+I don't think it's a good idea to upgrade that, so I will stick with this older
+version instead.

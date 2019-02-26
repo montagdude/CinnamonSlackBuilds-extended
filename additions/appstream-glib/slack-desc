@@ -1,0 +1,12 @@
+              |-----handy-ruler------------------------------------------------------|
+appstream-glib: appstream-glib (AppStream metadata reader/writer)
+appstream-glib:
+appstream-glib: This library provides GObjects and helper methods to make it easy to
+appstream-glib: read and write AppStream metadata. It also provides a simple DOM
+appstream-glib: implementation that makes it easy to edit nodes and convert to and
+appstream-glib: from the standardized XML representation. It also supports reading of
+appstream-glib: Debian-style DEP-11 metadata.
+appstream-glib:
+appstream-glib: Project URL: https://github.com/hughsie/appstream-glib
+appstream-glib:
+appstream-glib:
