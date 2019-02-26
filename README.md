@@ -33,8 +33,8 @@ First, in core-upgrades, enter your preferred Slackware-current mirror in
 the file called mirror (or leave the default, but it may not be optimal). Next,
 create a user and group for lightdm:
 
-$ groupadd -g 800 lightdm
-$ useradd -d /var/lib/lightdm -s /bin/false -u 800 -g 800 lightdm
+$ groupadd -g 800 lightdm  
+$ useradd -d /var/lib/lightdm -s /bin/false -u 800 -g 800 lightdm  
 
 The next step is to build. To speed things along, you may want to set MAKEFLAGS
 corresponding to the number of cores on your machine. For instance, if you have
@@ -45,12 +45,12 @@ export MAKEFLAGS="-j 4"
 Then, the following steps should build and install everything (must be run as
 root):
 
-$ cd core-upgrades
-$ ./core-upgrades.sh
-$ cd ../csb
-$ ./csb.sh
-$ cd ../additions
-$ ./additions.sh
+$ cd core-upgrades  
+$ ./core-upgrades.sh  
+$ cd ../csb  
+$ ./csb.sh  
+$ cd ../additions  
+$ ./additions.sh  
 
 Compiled packages are placed in /tmp/csbe/core-upgrades, /tmp/csbe/csb,
 and /tmp/csbe/additions, respectively (they are already installed after running
@@ -58,10 +58,9 @@ the commands above). Next, run xwmconfig as root and choose cinnamon-session.
 Finally, edit /etc/rc.d/rc.4 and add this near the top (just below echo
 "Starting up X11 session manager..."):
 
-# Try to use lightdm
-if [ -x /usr/bin/lightdm ]; then
-  exec /usr/bin/lightdm
-fi
+if [ -x /usr/bin/lightdm ]; then  
+  exec /usr/bin/lightdm  
+fi  
 
 Reboot, and if you have inittab set to boot to runlevel 4, you should be
 greeted by the slick-greeter lightdm greeter screen. Make sure cinnamon-session
