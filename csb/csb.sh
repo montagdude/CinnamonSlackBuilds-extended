@@ -64,6 +64,6 @@ for package in $LIST; do
     packagename="$(./${package}.SlackBuild)"
 
     # Install
-    upgradepkg --reinstall --install-new /tmp/csbe/core-upgrades/${packagename} || exit 1
+    upgradepkg --reinstall --install-new /tmp/csbe/csb/${packagename} || exit 1
   cd ..
 done
