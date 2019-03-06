@@ -123,6 +123,9 @@ chmod 755 $PKG/etc/profile.d/*
 mv $PKG/etc/profile.d/libglib2.csh $PKG/etc/profile.d/libglib2.csh.new
 mv $PKG/etc/profile.d/libglib2.sh $PKG/etc/profile.d/libglib2.sh.new
 
+# Install the .la files
+cp -a $CWD/la/*.la $PKG/usr/lib${LIBDIRSUFFIX} || exit 1
+
 find $PKG | xargs file | grep -e "executable" -e "shared object" \
   | grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null
 
