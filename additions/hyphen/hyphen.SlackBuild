@@ -28,9 +28,6 @@ COMMITVER=73dd2967c8e1e4f6d7334ee9e539a323d6e66cbd
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
 
-# Download source
-wget -c https://github.com/hunspell/$PRGNAM/archive/$COMMITVER/$PRGNAM-$COMMITVER.tar.gz
-
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
     i?86) ARCH=i586 ;;
@@ -38,6 +35,17 @@ if [ -z "$ARCH" ]; then
        *) ARCH=$( uname -m ) ;;
   esac
 fi
+
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}"
+  exit 0
+fi
+
+# Download source
+wget -c https://github.com/hunspell/$PRGNAM/archive/$COMMITVER/$PRGNAM-$COMMITVER.tar.gz
 
 CWD=$(pwd)
 TMP=${TMP:-/tmp}

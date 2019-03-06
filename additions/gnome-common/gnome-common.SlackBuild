@@ -29,6 +29,14 @@ TAG=${TAG:-_csbe}
 
 ARCH=noarch
 
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}"
+  exit 0
+fi
+
 # Download source
 wget -c https://download.gnome.org/sources/$PRGNAM/3.18/$PRGNAM-$VERSION.tar.xz
 

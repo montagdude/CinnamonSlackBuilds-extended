@@ -54,7 +54,16 @@ LIST=" \
 for package in $LIST; do
   cd $package
     chmod +x ${package}.SlackBuild
+
+    # Do the build
+    export PRINT_PACKAGE_NAME=""
     ./${package}.SlackBuild || exit 1
-    upgradepkg --reinstall --install-new /tmp/csbe/csb/${package}-*.t?z || exit 1
+
+    # Get package name
+    export PRINT_PACKAGE_NAME="yes"
+    packagename="$(./${package}.SlackBuild)"
+
+    # Install
+    upgradepkg --reinstall --install-new /tmp/csbe/core-upgrades/${packagename} || exit 1
   cd ..
 done

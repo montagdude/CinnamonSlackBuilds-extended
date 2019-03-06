@@ -46,17 +46,17 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-# Download source
-. ../mirror
-wget -c $MIRROR/source/d/python-setuptools/$SRCNAM-$VERSION.tar.lz
-
 # If the variable PRINT_PACKAGE_NAME is set, then this script will report what
 # the name of the created package would be, and then exit. This information
 # could be useful to other scripts.
 if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
-  echo "$PKGNAM-$VERSION-$ARCH-$BUILD.txz"
+  echo "$PKGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}"
   exit 0
 fi
+
+# Download source
+. ../mirror
+wget -c $MIRROR/source/d/python-setuptools/$SRCNAM-$VERSION.tar.lz
 
 CWD=$(pwd)
 TMP=${TMP:-/tmp}

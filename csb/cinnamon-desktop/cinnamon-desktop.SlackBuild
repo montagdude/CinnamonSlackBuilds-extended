@@ -36,6 +36,14 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
+# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
+# the name of the created package would be, and then exit. This information
+# could be useful to other scripts.
+if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
+  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}"
+  exit 0
+fi
+
 wget -c https://github.com/linuxmint/cinnamon-desktop/archive/$VERSION/$PRGNAM-$VERSION.tar.gz
 
 CWD=$(pwd)
