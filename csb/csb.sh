@@ -43,6 +43,7 @@ LIST=" \
   python-xapp \
   psutil \
   cinnamon-screensaver \
+  cinnamon-themes \
   mint-y-theme \
   mint-y-icons \
   rubygem-sass \
