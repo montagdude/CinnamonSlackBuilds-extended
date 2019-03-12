@@ -26,7 +26,7 @@
 PRGNAM=mint-themes
 VERSION=${VERSION:-1.7.8}
 COMMITVER=${COMMITVER:-9e29e3dbbe3df8e6f9eb88ae85b1955509d4a2f3}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_csbe}
 
 ARCH=noarch
@@ -55,10 +55,9 @@ rm -rf $PRGNAM-$COMMITVER
 unzip $CWD/$COMMITVER.zip
 cd $PRGNAM-$COMMITVER
 
-mkdir -p $PKG/usr/share
-rm -rf debian
-make
-mv files/usr/share/themes $PKG/usr/share
+python3 generate-themes.py
+
+cp -vr usr $PKG
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
