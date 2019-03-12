@@ -30,6 +30,7 @@ glib2 \
 libepoxy \
 cairo \
 pango \
+gdk-pixbuf2 \
 gtk+3 \
 polkit \
 libwacom \
