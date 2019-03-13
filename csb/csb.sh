@@ -33,7 +33,6 @@ LIST=" \
   libgee \
   caribou \
   pexpect \
-  python-soupsieve \
   BeautifulSoup \
   lxml \
   metacity \
