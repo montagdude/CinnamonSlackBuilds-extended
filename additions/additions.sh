@@ -34,6 +34,7 @@ xviewer \
 pix \
 nemo-fileroller \
 nemo-seahorse \
+nemo-python \
 "
 
 for package in $LIST; do
