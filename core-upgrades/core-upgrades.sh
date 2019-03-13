@@ -40,7 +40,6 @@ pygobject \
 pygobject3 \
 dbus-python \
 python-pillow \
-Cython \
 libmbim \
 libqmi \
 ModemManager \
