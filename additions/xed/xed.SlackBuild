@@ -91,7 +91,7 @@ meson setup \
   --localstatedir=/var \
   --mandir=/usr/man \
   --backend=ninja \
-  --buildtype=plain \
+  --buildtype=release \
   ..
 
 ninja
