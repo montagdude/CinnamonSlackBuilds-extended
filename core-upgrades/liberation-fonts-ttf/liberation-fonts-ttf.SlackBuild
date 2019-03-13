@@ -22,7 +22,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PKGNAM=liberation-fonts-ttf
-VERSION=${VERSION:-2.00.1}
+VERSION=${VERSION:-2.00.5}
 ARCH=noarch
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
@@ -37,7 +37,7 @@ fi
 
 # Download source
 . ../mirror
-wget -c $MIRROR/source/x/liberation-fonts-ttf/$PKGNAM-$VERSION.tar.xz
+wget -c $MIRROR/source/x/liberation-fonts-ttf/$PKGNAM-$VERSION.tar.lz
 
 CWD=$(pwd)
 TMP=${TMP:-/tmp}
