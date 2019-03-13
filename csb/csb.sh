@@ -33,7 +33,6 @@ LIST=" \
   libgee \
   caribou \
   pexpect \
-  lxml \
   metacity \
   polib \
   cinnamon-translations \
