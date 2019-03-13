@@ -57,7 +57,7 @@ cd $PRGNAM-$COMMITVER
 
 mkdir -p $PKG/usr/share/icons
 rm -rf debian
-mv usr/share/icons/Mint-Y $PKG/usr/share/icons/
+mv usr/share/icons/Mint-Y* $PKG/usr/share/icons/
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp README.md $PKG/usr/doc/$PRGNAM-$VERSION
