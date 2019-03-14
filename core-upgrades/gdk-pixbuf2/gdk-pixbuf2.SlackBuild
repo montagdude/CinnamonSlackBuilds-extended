@@ -130,6 +130,9 @@ esac
 cp $CWD/update-gdk-pixbuf-loaders $PKG/usr/bin/update-gdk-pixbuf-loaders
 chmod 0755 $PKG/usr/bin/update-gdk-pixbuf-loaders
 
+# Manually install the .la files, since they are needed in 14.2
+cp $CWD/libgdk_pixbuf*.la $PKG/usr/lib${LIBDIRSUFFIX} || exit 1
+
 find $PKG | xargs file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
