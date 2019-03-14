@@ -24,7 +24,7 @@
 
 
 PKGNAM=meson
-VERSION=${VERSION:-0.50.0}
+VERSION=${VERSION:-0.49.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
 
@@ -45,8 +45,9 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
 fi
 
 # Download source
-. ../mirror
-wget -c $MIRROR/source/d/meson/$PKGNAM-$VERSION.tar.lz
+#. ../mirror
+#wget -c $MIRROR/source/d/meson/$PKGNAM-$VERSION.tar.lz
+wget -c https://github.com/mesonbuild/$PKGNAM/releases/download/$VERSION/$PKGNAM-$VERSION.tar.gz
 
 CWD=$(pwd)
 TMP=${TMP:-/tmp}
