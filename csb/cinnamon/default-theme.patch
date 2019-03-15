@@ -5,7 +5,7 @@
          gettext-domain="@GETTEXT_PACKAGE@">
      <key name="name" type="s">
 -      <default>""</default>
-+      <default>"Linux Mint"</default>
++      <default>"Mint-Y"</default>
        <_summary>Theme name</_summary>
        <_description>
         The name of the theme
