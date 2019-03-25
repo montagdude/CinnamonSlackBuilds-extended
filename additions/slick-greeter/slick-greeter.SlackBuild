@@ -23,7 +23,8 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=slick-greeter
-VERSION=${VERSION:-1.2.4}
+VERSION=${VERSION:-git7f04f066a}
+COMMITVER=7f04f066a18b3f398f292846c4fc8cc837c678a3
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
 
@@ -45,7 +46,7 @@ if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
 fi
 
 # Download source
-wget -c https://github.com/linuxmint/$PRGNAM/archive/$VERSION/$PRGNAM-$VERSION.tar.gz
+wget -c https://github.com/linuxmint/$PRGNAM/archive/$COMMITVER/$PRGNAM-$COMMITVER.tar.gz
 
 CWD=$(pwd)
 TMP=${TMP:-/tmp}
@@ -71,9 +72,9 @@ set -e
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.gz
-cd $PRGNAM-$VERSION
+rm -rf $PRGNAM-$COMMITVER
+tar xvf $CWD/$PRGNAM-$COMMITVER.tar.gz
+cd $PRGNAM-$COMMITVER
 chown -R root:root .
 find -L . \
  \( -perm 777 -o -perm 775 -o -perm 750 -o -perm 711 -o -perm 555 \
