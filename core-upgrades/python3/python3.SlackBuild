@@ -26,7 +26,7 @@
 
 PKGNAM=python3
 SRCNAM=Python
-VERSION=${VERSION:-3.7.2}
+VERSION=${VERSION:-3.7.3}
 BRANCH_VERSION=$(echo $VERSION | cut -f 1,2 -d . )
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
