@@ -34,7 +34,7 @@ fi
 
 PKGNAM=python-setuptools
 SRCNAM=setuptools
-VERSION=${VERSION:-40.8.0}
+VERSION=${VERSION:-40.9.0}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
 
