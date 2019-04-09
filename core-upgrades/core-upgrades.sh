@@ -36,6 +36,7 @@ polkit \
 libwacom \
 json-glib \
 upower \
+pycairo \
 pygobject \
 pygobject3 \
 dbus-python \
