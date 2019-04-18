@@ -24,7 +24,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PKGNAM=libmbim
-VERSION=${VERSION:-1.18.0}
+VERSION=${VERSION:-1.18.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
 
@@ -76,6 +76,9 @@ cd $TMP
 rm -rf $PKGNAM-$VERSION
 tar xf $CWD/$PKGNAM-$VERSION.tar.xz || exit 1
 cd $PKGNAM-$VERSION || exit 1
+
+# Remove these (if they exist to force generating them with help2man:
+rm -f docs/man/*.1
 
 chown -R root:root .
 find . \
