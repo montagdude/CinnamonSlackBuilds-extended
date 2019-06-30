@@ -24,7 +24,7 @@
 
 PKGNAM=pygobject3
 SRCNAM=pygobject
-VERSION=${VERSION:-3.32.1}
+VERSION=${VERSION:-3.32.2}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
 
