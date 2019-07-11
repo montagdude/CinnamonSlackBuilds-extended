@@ -46,7 +46,7 @@ fi
 
 # Download source
 . ../mirror
-wget -c $MIRROR/source/l/freetype/$PKGNAM-$VERSION.tar.lz
+wget -c $MIRROR/source/l/freetype/$PKGNAM-$VERSION.tar.xz
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
