@@ -24,7 +24,7 @@
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=cinnamon-session
-VERSION=${VERSION:-4.0.0}
+VERSION=${VERSION:-4.2.1}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_csbe}
 
@@ -81,7 +81,6 @@ find -L . \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
 patch -p1 < $CWD/timeout.patch
-patch -p1 < $CWD/consolekit_suspend_hibernate.patch
 
 mkdir -p build
 cd build

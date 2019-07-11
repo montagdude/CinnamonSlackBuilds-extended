@@ -1,9 +1,8 @@
 #!/bin/sh
 
-# Slackware build script for cinnamon-settings-daemon
+# Slackware build script for tinycss
 
-# Copyright 2014-2018 Willy Sudiarto Raharjo <willysr@slackware-id.org>
-# Copyright 2019 Daniel Prosser, Lexington Park, MD
+# Copyright 2016  Dimitris Zlatanidis  Orestiada, Greece
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -23,10 +22,12 @@
 #  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 #  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-PRGNAM=cinnamon-settings-daemon
-VERSION=${VERSION:-4.2.1}
+# Modified for CSB Project
+
+PRGNAM=tinycss
+VERSION=${VERSION:-0.4}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_csbe}
+TAG=${TAG:-_csb}
 
 if [ -z "$ARCH" ]; then
   case "$( uname -m )" in
@@ -36,20 +37,12 @@ if [ -z "$ARCH" ]; then
   esac
 fi
 
-# If the variable PRINT_PACKAGE_NAME is set, then this script will report what
-# the name of the created package would be, and then exit. This information
-# could be useful to other scripts.
-if [ ! -z "${PRINT_PACKAGE_NAME}" ]; then
-  echo "$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}"
-  exit 0
-fi
-
-wget -c https://github.com/linuxmint/cinnamon-settings-daemon/archive/$VERSION/$PRGNAM-$VERSION.tar.gz
+wget -c https://github.com/Kozea/tinycss/archive/v$VERSION/$PRGNAM-$VERSION.tar.gz
 
 CWD=$(pwd)
-TMP=${TMP:-/tmp}
+TMP=${TMP:-/tmp/csb}
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp/csbe/csb}
+OUTPUT=${OUTPUT:-/tmp}
 
 if [ "$ARCH" = "i586" ]; then
   SLKCFLAGS="-O2 -march=i586 -mtune=i686"
@@ -80,35 +73,18 @@ find -L . \
  \( -perm 666 -o -perm 664 -o -perm 640 -o -perm 600 -o -perm 444 \
   -o -perm 440 -o -perm 400 \) -exec chmod 644 {} \;
 
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
-./autogen.sh \
-  --prefix=/usr \
-  --libdir=/usr/lib${LIBDIRSUFFIX} \
-  --sysconfdir=/etc \
-  --localstatedir=/var \
-  --mandir=/usr/man \
-  --docdir=/usr/doc/$PRGNAM-$VERSION \
-  --enable-static=no \
-  --disable-schemas-compile \
-  --enable-polkit \
-  --build=$ARCH-slackware-linux
-
-make
-make install DESTDIR=$PKG
+python setup.py install --root=$PKG
+python3 setup.py install --root=$PKG
 
 find $PKG -print0 | xargs -0 file | grep -e "executable" -e "shared object" | grep ELF \
   | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null || true
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a AUTHORS COPYING* MAINTAINERS $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a CHANGES LICENSE README.rst $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
-find $PKG/usr/doc/$PRGNAM-$VERSION/ -type f -exec chmod 644 {} \;
-chown -R root:root $PKG/usr/doc/$PRGNAM-$VERSION
 
 mkdir -p $PKG/install
 cat $CWD/slack-desc > $PKG/install/slack-desc
-cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-txz}

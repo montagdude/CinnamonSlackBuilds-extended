@@ -3,6 +3,7 @@
 # Builds Cinnamon. Based on build-cinnamon.sh script from CSB.
 
 LIST=" \
+  tinycss \
   libxkbcommon \
   setproctitle \
   ptyprocess \
